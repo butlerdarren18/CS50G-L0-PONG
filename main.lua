@@ -6,6 +6,7 @@ class = require 'class' -- classes exist in lua but the class library makes thin
 
 -- Our Paddle class, stores pos and dimensions for each paddle + the logic for rendering them 
 require 'Paddle'
+require 'Ball'
 WINDOW_WIDTH  = 1280
 WINDOW_HEIGHT = 720 
 
@@ -26,14 +27,11 @@ function love.load()
 	player1Score = 0 
 	player2Score = 0 
 
-	player1Y = 30
-	player2Y = VIRTUAL_HEIGHT - 50
+	player1 = Paddle(10, 30, 5, 20)
+	player2 = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 30, 5, 20)
+	ball = Ball(VIRTUAL_WIDTH / 2-2, VIRTUAL_HEIGHT / 2-2 , 4, 4)
 
-	ballX = VIRTUAL_WIDTH / 2 - 2 
-	ballY = VIRTUAL_HEIGHT / 2 - 2
 
-	ballDX  = math.random(2) == 1 and 100 or -100 
-	ballDY = math.random(-50, 50)
 	gameState = 'start'
 
 	love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -50,29 +48,15 @@ end
 
 
 function love.update(delta)
+	-- Player Movement
 
-	-- PLAYER 1 MOVEMENT
-	if love.keyboard.isDown('w') then 
-		player1Y = math.max(0, player1Y + -PADDLE_SPEED * delta) 
-	elseif love.keyboard.isDown('s') then
-		player1Y = math.min(VIRTUAL_HEIGHT -20, player1Y + PADDLE_SPEED * delta )
+	player1:update(delta, 'w', 's')
+	player2:update(delta, 'up', 'down')
 
-	end 
-
-	-- PLAYER 2 MOVEMENT 
-	if love.keyboard.isDown('up') then 
-		player2Y = math.max(0,player2Y + -PADDLE_SPEED * delta)
-	elseif love.keyboard.isDown('down') then 
-		player2Y = math.min(VIRTUAL_HEIGHT - 20, player2Y + PADDLE_SPEED * delta)
-	end
-	
-	-- BALL 
+	-- Ball Movement 
 	if gameState == 'play' then 
-		ballX = ballX + ballDX * delta 
-		ballY = ballY + ballDY * delta 
-	end 
-
-
+		ball:update(delta)
+	end
 end 
 
 -- if escape key is pressed then quit the program
@@ -84,13 +68,7 @@ function love.keypressed(key)
 			gameState = 'play'
 		else
 			gameState = 'start'
-			-- Set ball back to center 
-			ballX = VIRTUAL_WIDTH / 2 - 2 
-			ballY = VIRTUAL_HEIGHT / 2 - 2 
-
-			-- ternary operation --- if 1 then 100 and if not 1 then -100 
-			ballDX = math.random(2) == 1 and 100 or -100 
-			ballDY = math.random(-50, 50) * 1.5
+			ball:reset()
 		end 
 
 	end
@@ -106,11 +84,11 @@ function love.draw()
 	love.graphics.printf('HELLO PONG', 0,VIRTUAL_HEIGHT / 10, VIRTUAL_WIDTH, 'center')
 	
 	-- render the paddles 
-	love.graphics.rectangle('fill', 10, player1Y, 5, 20) -- left 
-	love.graphics.rectangle('fill',VIRTUAL_WIDTH-10,player2Y, 5, 20) -- right 
+	player1:render()-- left 
+	player2:render()-- right 
 
 	-- render the ball 
-	love.graphics.rectangle('fill', ballX, ballY, 4,4)
+	ball:render()
 
 	-- switch font and draw score to right and left center of screen
 	love.graphics.setFont(scoreFont)
