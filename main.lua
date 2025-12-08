@@ -2,7 +2,10 @@
 -- Bilinear / Trilinear / Anistropic filtering cause bluriness in 2D
 
 push = require 'push' -- this is how you add a library (remember to put it inside the project folder )
+class = require 'class' -- classes exist in lua but the class library makes things simpler
 
+-- Our Paddle class, stores pos and dimensions for each paddle + the logic for rendering them 
+require 'Paddle'
 WINDOW_WIDTH  = 1280
 WINDOW_HEIGHT = 720 
 
