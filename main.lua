@@ -119,10 +119,10 @@ function love.keypressed(key)
 	elseif key == 'enter'or  key == 'return' then 
 
 		if gameState == 'serve' then 
-			if ServingPlayer == 1 then
+			if servingPlayer == 1 then
 				ball.dx = math.random(-50)
 			end
-			if ServingPlayer == 2 then
+			if servingPlayer == 2 then
 				ball.dx = math.random(50)
 			end 
 			gameState = 'play'
@@ -144,7 +144,17 @@ function love.draw()
 	love.graphics.clear(40/255, 45/255, 52/255, 255) -- LOVE NOW USES RGB COLOR RANGE 0.0 - 1.0
 	
 	-- print HELLO PONG
-	love.graphics.printf('HELLO PONG', 0,VIRTUAL_HEIGHT / 10, VIRTUAL_WIDTH, 'center')
+	if gameState == 'start' then
+		love.graphics.printf('HELLO PONG', 0,VIRTUAL_HEIGHT / 10, VIRTUAL_WIDTH, 'center')
+	end 
+
+	if gameState == 'serve' then 
+		if servingPlayer == 1 then 
+			love.graphics.printf('Player 1s turn to serve. \n Press enter to serve.', 0,VIRTUAL_HEIGHT / 10, VIRTUAL_WIDTH, 'center')
+		elseif servingPlayer == 2 then
+			love.graphics.printf('Player 2s turn to serve. \n Press enter to serve.', 0,VIRTUAL_HEIGHT / 10, VIRTUAL_WIDTH, 'center')
+		end 
+	end 
 	
 	-- render the paddles 
 	player1:render()-- left 
