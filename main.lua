@@ -20,6 +20,8 @@ function love.load()
 	-- seed the rng with current time 
 	math.randomseed(os.time())
 
+	love.window.setTitle('CS50 - L0 - Pong in Love2D')
+
 	gameFont = love.graphics.newFont('Font.ttf', 8)
 	scoreFont = love.graphics.newFont('Font.ttf', 16)
 	love.graphics.setFont(gameFont)
@@ -92,12 +94,19 @@ function love.draw()
 
 	-- switch font and draw score to right and left center of screen
 	love.graphics.setFont(scoreFont)
-	love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGHT / 3)
-	love.graphics.print(tostring(player2Score), VIRTUAL_WIDTH / 2 + 30, VIRTUAL_HEIGHT / 3) 
+	love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 40, VIRTUAL_HEIGHT / 3)
+	love.graphics.print(tostring(player2Score), VIRTUAL_WIDTH / 2 + 30, VIRTUAL_HEIGHT / 3)
+	displayFPS() 
 	
 	push:apply('end')
 
 -- seeded random 
 -- applied math.max( ) and math.min( ) to playerY values to keep the paddles on screen 
 end
+ 
+ function displayFPS()
+ 	love.graphics.setFont(love.graphics.newFont('Font.ttf', 8))
+ 	love.graphics.setColor(0, 255, 0, 255)
+ 	love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10) -- lua does not allow string concatenation by default, so ..
+ end 
  
