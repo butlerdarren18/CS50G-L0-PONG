@@ -120,17 +120,21 @@ function love.keypressed(key)
 
 		if gameState == 'serve' then 
 			if servingPlayer == 1 then
-				ball.dx = math.random(-50)
+				ball.dx = -25
 			end
 			if servingPlayer == 2 then
-				ball.dx = math.random(50)
+				ball.dx = 25
 			end 
 			gameState = 'play'
 
 		elseif gameState == 'start' then 
 			gameState = 'play'
 		else
-			gameState = 'start'
+			if servingPlayer == 1 or servingPlayer == 2 then 
+				gameState = 'serve'
+			else
+				gameState = 'start'
+			end
 			ball:reset()
 		end 
 
