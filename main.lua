@@ -70,19 +70,32 @@ function love.update(delta)
 		else
 			ball.dy = math.random(50,150)
 		end 
+		player1Score = player1Score + 1
 	end
 
 
 	--- PLAYER 2 BALL COLLISION 
 	if ball:collides(player2) then 
 		ball.dx = -ball.dx * 1.03 -- increase velocity by 3% 
-		ball.x = player2.x + 5 -- make sure the ball isn't inside of the paddle 
+		ball.x = player2.x -4 -- make sure the ball isn't inside of the paddle 
 
 		if ball.dy < 0 then 
 			ball.dy = -math.random(50,150)
 		else
 			ball.dy = math.random(50,150)
 		end
+		player2Score = player2Score + 1
+	end
+
+	-- UPPER AND LOWER BOUNDS
+	if ball.y < 0 then
+		ball.y = 0
+		ball.dy = -ball.dy 
+	end 
+
+	if ball.y > VIRTUAL_HEIGHT then 
+		ball.y = VIRTUAL_HEIGHT - 4
+		ball.dy = -ball.dy 
 	end 
 end 
 

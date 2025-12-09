@@ -23,6 +23,16 @@ function Ball:update(dt)
 	-- move the ball 
 	self.x = self.x + self.dx * dt 
 	self.y = self.y + self.dy * dt 
+
+
+	if ball.y <= 0 then
+		ball.y = 0 
+		ball.dy = -ball.dy 
+	end
+	if ball.y >= VIRTUAL_HEIGHT - 4 then  -- 4 because of the ball's size 
+		ball.y = VIRTUAL_HEIGHT - 4 
+		ball.dy = -ball.dy 
+	end
 end
 
 function Ball:render()
