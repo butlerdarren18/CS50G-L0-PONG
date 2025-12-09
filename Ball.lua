@@ -8,15 +8,15 @@ function Ball:init(x, y, width, height)
 	self.height = height 
 
 	-- for velocity 
-	self.dy = math.random(2) == 1 and -100 or 100
-	self.dx = math.random(-50, 50)
+	self.dy = math.random(2) == 1 and -BALL_SPEED or BALL_SPEED
+	self.dx = math.random(-BALL_SPEED, BALL_SPEED)
 end 
 
 function Ball:reset()
 	self.x = VIRTUAL_WIDTH / 2-2 
 	self.y = VIRTUAL_HEIGHT / 2-2 
-	self.dy = math.random(2) == 1 and 100 or -100
-	self.dx = math.random(-50, 50)
+	self.dy = math.random(2) == 1 and BALL_SPEED or -BALL_SPEED
+	self.dx = math.random(-BALL_SPEED/2, BALL_SPEED/2)
 end
 
 function Ball:update(dt)
@@ -25,14 +25,7 @@ function Ball:update(dt)
 	self.y = self.y + self.dy * dt 
 
 
-	if ball.y <= 0 then
-		ball.y = 0 
-		ball.dy = -ball.dy 
-	end
-	if ball.y >= VIRTUAL_HEIGHT - 4 then  -- 4 because of the ball's size 
-		ball.y = VIRTUAL_HEIGHT - 4 
-		ball.dy = -ball.dy 
-	end
+
 end
 
 function Ball:render()

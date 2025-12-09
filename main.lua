@@ -10,11 +10,14 @@ require 'Ball'
 WINDOW_WIDTH  = 1280
 WINDOW_HEIGHT = 720 
 
-PADDLE_SPEED = 200
+BALL_SPEED = 200
+PADDLE_SPEED = 275
 -- PUSH ALLOWS FOR VIRTUAL RESOLUTION WINDOW 
 
 VIRTUAL_WIDTH  = 432
 VIRTUAL_HEIGHT = 243
+
+WIN_SCORE  = 2
 
 function love.load()
 	-- seed the rng with current time 
@@ -66,9 +69,9 @@ function love.update(delta)
 		ball.x = player1.x + 5 -- make sure the ball isn't inside of the paddle 
 
 		if ball.dy < 0 then 
-			ball.dy = -math.random(50,150)
+			ball.dy = -math.random(BALL_SPEED / 2,BALL_SPEED * 1.5) 
 		else
-			ball.dy = math.random(50,150)
+			ball.dy = math.random(BALL_SPEED / 2,BALL_SPEED * 1.5)
 		end 
 	end
 
@@ -79,9 +82,9 @@ function love.update(delta)
 		ball.x = player2.x -4 -- make sure the ball isn't inside of the paddle 
 
 		if ball.dy < 0 then 
-			ball.dy = -math.random(50,150)
+			ball.dy = -math.random(BALL_SPEED / 2,BALL_SPEED * 1.5)
 		else
-			ball.dy = math.random(50,150)
+			ball.dy = math.random(BALL_SPEED / 2,BALL_SPEED * 1.5)
 		end
 	end
 
@@ -101,14 +104,26 @@ function love.update(delta)
 		servingPlayer = 1
 		player2Score = player2Score + 1 
 		ball:reset()
-		gameState = 'serve'
+
+		if player2Score == WIN_SCORE then
+			winningPlayer = 2 
+			gameState = 'done'
+		else	
+			gameState = 'serve'
+		end
 	end
 
 	if ball.x > VIRTUAL_WIDTH then 
 		servingPlayer = 2
 		player1Score = player1Score + 1
 		ball:reset()
-		gameState ='serve'
+
+		if player1Score == WIN_SCORE then 
+			winningPlayer = 1
+			gameState = 'done'
+		else
+			gameState ='serve'
+		end
 	end 
 end 
 
@@ -129,6 +144,9 @@ function love.keypressed(key)
 
 		elseif gameState == 'start' then 
 			gameState = 'play'
+		elseif gameState == 'done' then
+			reset_game()
+
 		else
 			if servingPlayer == 1 or servingPlayer == 2 then 
 				gameState = 'serve'
@@ -140,6 +158,13 @@ function love.keypressed(key)
 
 	end
 
+end 
+
+function reset_game()
+	gameState = 'serve'
+	ball:reset()
+	player1Score = 0
+	player2Score = 0
 end 
 
 function love.draw()
@@ -154,12 +179,19 @@ function love.draw()
 
 	if gameState == 'serve' then 
 		if servingPlayer == 1 then 
-			love.graphics.printf('Player 1s turn to serve. \n Press enter to serve.', 0,VIRTUAL_HEIGHT / 10, VIRTUAL_WIDTH, 'center')
+			love.graphics.printf('PLAYER 1s TURN TO SERVE. \n PRESS ENTER TO SERVE.', 0,VIRTUAL_HEIGHT / 10, VIRTUAL_WIDTH, 'center')
 		elseif servingPlayer == 2 then
-			love.graphics.printf('Player 2s turn to serve. \n Press enter to serve.', 0,VIRTUAL_HEIGHT / 10, VIRTUAL_WIDTH, 'center')
-		end 
-	end 
+			love.graphics.printf('PLAYER 2s TURN TO SERVE. \n PRESS ENTER TO SERVE.', 0,VIRTUAL_HEIGHT / 10, VIRTUAL_WIDTH, 'center')
+		end
+	end
 	
+	if gameState == 'done' then
+		if winningPlayer == 1 then 
+			love.graphics.printf("PLAYER 1 WINS", 0,VIRTUAL_HEIGHT / 10, VIRTUAL_WIDTH, 'center')
+		else
+			love.graphics.printf("PLAYER 2 WINS", 0,VIRTUAL_HEIGHT / 10, VIRTUAL_WIDTH, 'center')
+		end
+	end
 	-- render the paddles 
 	player1:render()-- left 
 	player2:render()-- right 
