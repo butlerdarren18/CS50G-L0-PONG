@@ -20,7 +20,7 @@ function love.load()
 	-- seed the rng with current time 
 	math.randomseed(os.time())
 
-	love.window.setTitle('CS50 - L0 - Pong in Love2D')
+	love.window.setTitle('CS50G - L0 - Pong in Love2D')
 
 	gameFont = love.graphics.newFont('Font.ttf', 8)
 	scoreFont = love.graphics.newFont('Font.ttf', 16)
@@ -70,7 +70,6 @@ function love.update(delta)
 		else
 			ball.dy = math.random(50,150)
 		end 
-		player1Score = player1Score + 1
 	end
 
 
@@ -84,7 +83,6 @@ function love.update(delta)
 		else
 			ball.dy = math.random(50,150)
 		end
-		player2Score = player2Score + 1
 	end
 
 	-- UPPER AND LOWER BOUNDS
@@ -96,6 +94,21 @@ function love.update(delta)
 	if ball.y > VIRTUAL_HEIGHT then 
 		ball.y = VIRTUAL_HEIGHT - 4
 		ball.dy = -ball.dy 
+	end 
+
+	-- IF THE BALL REACHES THE EDGE OF THE SCREEN... 
+	if ball.x < 0 then 
+		servingPlayer = 1
+		player2Score = player2Score + 1 
+		ball:reset()
+		gameState = 'serve'
+	end
+
+	if ball.x > VIRTUAL_WIDTH then 
+		servingPlayer = 2
+		player1Score = player1Score + 1
+		ball:reset()
+		gameState ='serve'
 	end 
 end 
 
