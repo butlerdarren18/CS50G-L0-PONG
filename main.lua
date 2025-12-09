@@ -59,6 +59,31 @@ function love.update(delta)
 	if gameState == 'play' then 
 		ball:update(delta)
 	end
+
+	--- PLAYER 1 BALL COLLISION
+	if ball:collides(player1) then
+		ball.dx = -ball.dx * 1.03 -- increase velocity by 3% 
+		ball.x = player1.x + 5 -- make sure the ball isn't inside of the paddle 
+
+		if ball.dy < 0 then 
+			ball.dy = -math.random(50,150)
+		else
+			ball.dy = math.random(50,150)
+		end 
+	end
+
+
+	--- PLAYER 2 BALL COLLISION 
+	if ball:collides(player2) then 
+		ball.dx = -ball.dx * 1.03 -- increase velocity by 3% 
+		ball.x = player2.x + 5 -- make sure the ball isn't inside of the paddle 
+
+		if ball.dy < 0 then 
+			ball.dy = -math.random(50,150)
+		else
+			ball.dy = math.random(50,150)
+		end
+	end 
 end 
 
 -- if escape key is pressed then quit the program
@@ -107,6 +132,5 @@ end
  function displayFPS()
  	love.graphics.setFont(love.graphics.newFont('Font.ttf', 8))
  	love.graphics.setColor(0, 255, 0, 255)
- 	love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10) -- lua does not allow string concatenation by default, so ..
- end 
- 
+ 	love.graphics.print('FPS: ' .. tostring(love.timer.getFPS()), 10, 10) -- lua does not allow string concatenation by default, 
+end

@@ -28,3 +28,17 @@ end
 function Ball:render()
 	love.graphics.rectangle('fill', self.x, self.y, self.width, self.height)
 end
+
+function Ball:collides(paddle)
+	-- if the left edge is farther to the right than the right edge of the other 
+	if self.x > paddle.x + paddle.width or paddle.x > self.x + self.width then 
+		return false 
+	end 
+	-- then top bottom 
+	if self.y > paddle.y + paddle.height or paddle.y > self.y + self.height then 
+		return false
+	end
+
+	-- if the above aren't true, they are overlapping 
+	return true 
+end 
